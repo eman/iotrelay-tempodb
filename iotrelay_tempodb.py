@@ -1,3 +1,9 @@
+'''
+Copyright (c) 2014, Emmanuel Levijarvi
+All rights reserved.
+License BSD
+'''
+
 import logging
 from collections import defaultdict
 from tempodb import Client, DataPoint
