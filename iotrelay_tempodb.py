@@ -1,3 +1,4 @@
+import sys
 import logging
 from collections import defaultdict
 from tempodb import Client, DataPoint
@@ -16,15 +17,11 @@ class Handler(object):
         self.api_secret = config['api secret']
 
     def set_reading(self, reading):
-        if reading is None:
-            return
-        logger.debug('tempodb setting: {0!s}, {1}'.format(reading.timestamp,
-                                                          reading.value))
-        option = "{0} batch size".format(reading.reading_type)
-        batch_size = self.config.get(option, self.batch_size)
+        logger.debug('tempodb setting: {0!s}'.format(reading))
         data = self.readings[(reading.series_key, reading.reading_type)]
         data.append(DataPoint(reading.timestamp, reading.value))
-        if len(data) >= batch_size:
+        batch_option = "{0} batch size".format(reading.reading_type)
+        if len(data) >= int(self.config.get(batch_option, self.batch_size)):
             option = "{0} api key".format(reading.reading_type)
             api_key = self.config.get(option, self.api_key)
             option = "{0} api secret".format(reading.reading_type)
