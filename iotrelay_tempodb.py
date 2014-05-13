@@ -1,4 +1,8 @@
-import sys
+'''
+Copyright (c) 2014, Emmanuel Levijarvi
+All rights reserved.
+License BSD
+'''
 import logging
 from collections import defaultdict
 from tempodb import Client, DataPoint
@@ -26,9 +30,7 @@ class Handler(object):
             api_key = self.config.get(option, self.api_key)
             option = "{0} api secret".format(reading.reading_type)
             api_secret = self.config.get(option, self.api_secret)
-            resp = Client(api_key, api_secret).write_key(reading.series_key, data)
-            if resp:
-                logger.error("TempoDB returned {0}".format(resp))
+            Client(api_key, api_secret).write_key(reading.series_key, data)
             self.readings[(reading.series_key, reading.reading_type)] = []
 
     def flush(self):
