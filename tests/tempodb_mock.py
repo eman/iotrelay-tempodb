@@ -1,5 +1,6 @@
 TIME_FMT = "%Y-%m-%d %H:%M:%S %z"
 
+
 class DataPoint(object):
     def __init__(self, timestamp, value):
         self.timestamp = timestamp
