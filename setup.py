@@ -19,6 +19,7 @@ setup(name='iotrelay-tempodb',
       py_modules=['iotrelay_tempodb'],
       test_suite='tests',
       install_requires=['iotrelay', 'tempodb'],
+      tests_require=['iotrelay'],
       classifiers=[
           'Development Status :: 4 - Beta',
           'Intended Audience :: Developers',
