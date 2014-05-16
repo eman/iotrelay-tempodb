@@ -1,3 +1,8 @@
+'''
+Copyright (c) 2014, Emmanuel Levijarvi
+All rights reserved.
+License BSD
+'''
 from datetime import datetime
 from unittest import TestCase
 import csv
