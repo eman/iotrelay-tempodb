@@ -1,4 +1,4 @@
-TIME_FMT = "%Y-%m-%d %H:%M:%S %z"
+TIME_FMT = "%Y-%m-%d %H:%M:%S"
 
 
 class DataPoint(object):

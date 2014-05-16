@@ -10,6 +10,7 @@ iotrelay_tempodb.Client = Client
 iotrelay_tempodb.DataPoint = DataPoint
 
 TIME_FMT = "%Y-%m-%d %H:%M:%S %z"
+TIME_FMT = "%Y-%m-%d %H:%M:%S"
 TEST_DATA = os.path.join(os.path.realpath(os.path.dirname(__file__)),
                          "test_data.csv")
 
@@ -20,7 +21,7 @@ class IoTTempoDBTest(TestCase):
             return self._readings
         except AttributeError:
             with open(TEST_DATA, 'rt') as f:
-                self._readings = [line for line in csv.reader(f)]
+                self._readings = [[a[:-6], b, c] for a, b, c in csv.reader(f)]
         return self._readings
 
     def compare_readings(self, num_readings):
@@ -31,7 +32,10 @@ class IoTTempoDBTest(TestCase):
             timestamp = datetime.strptime(ts, TIME_FMT)
             tdb_handler.set_reading(Reading('weather', value, timestamp, key))
         tdb_handler.flush()
-        self.assertEqual(sorted(Client.data_points), sorted(self.readings()))
+        self.assertEqual(len(Client.data_points), len(self.readings()))
+        for a, b in zip(sorted(Client.data_points), sorted(self.readings())):
+            self.assertEqual(a, b)
+        # self.assertEqual(sorted(Client.data_points), sorted(self.readings()))
 
     def test_compare_readings_batch_size_one(self):
         config = {'batch size': 1, 'api key': '', 'api secret': ''}
@@ -40,7 +44,10 @@ class IoTTempoDBTest(TestCase):
         for ts, key, value in self.readings():
             timestamp = datetime.strptime(ts, TIME_FMT)
             tdb_handler.set_reading(Reading('weather', value, timestamp, key))
-        self.assertEqual(Client.data_points, self.readings())
+        self.assertEqual(len(Client.data_points), len(self.readings()))
+        for a, b in zip(Client.data_points, self.readings()):
+            self.assertEqual(a, b)
+        # self.assertEqual(Client.data_points, self.readings())
 
     def test_compare_readings_vary_batch_size(self):
         [self.compare_readings(i) for i in range(2, 12)]
