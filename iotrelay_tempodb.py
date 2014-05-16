@@ -6,6 +6,7 @@ License BSD
 import logging
 from collections import defaultdict
 from tempodb import Client, DataPoint
+import requests
 
 logger = logging.getLogger(__name__)
 __version__ = "1.0.0"
@@ -26,20 +27,23 @@ class Handler(object):
         data.append(DataPoint(reading.timestamp, reading.value))
         batch_option = "{0} batch size".format(reading.reading_type)
         if len(data) >= int(self.config.get(batch_option, self.batch_size)):
-            option = "{0} api key".format(reading.reading_type)
-            api_key = self.config.get(option, self.api_key)
-            option = "{0} api secret".format(reading.reading_type)
-            api_secret = self.config.get(option, self.api_secret)
-            Client(api_key, api_secret).write_key(reading.series_key, data)
+            self.send_reading(reading.series_key, reading.reading_type, data)
             self.readings[(reading.series_key, reading.reading_type)] = []
 
     def flush(self):
         for series, data in self.readings.items():
             if not data:
                 continue
-            option = "{0} api key".format(series[1])
-            api_key = self.config.get(option, self.api_key)
-            option = "{0} api secret".format(series[1])
-            api_secret = self.config.get(option, self.api_secret)
-            Client(api_key, api_secret).write_key(series[0], data)
+            self.send_reading(series[0], series[1], data)
             self.readings[series] = []
+
+    def send_reading(self, series_key, reading_type, data):
+        api_key_option = "{0} api key".format(reading_type)
+        api_key = self.config.get(api_key_option, self.api_key)
+        api_secret_option = "{0} api secret".format(reading_type)
+        api_secret = self.config.get(api_secret_option, self.api_secret)
+        try:
+            Client(api_key, api_secret).write_key(series_key, data)
+        except requests.exceptions.RequestException as e:
+            logger.error('Unable to send {0} to TempoDB. {1!s}'.format(
+                         series_key, e))
