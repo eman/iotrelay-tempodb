@@ -31,11 +31,8 @@ class Handler(object):
             self.readings[(reading.series_key, reading.reading_type)] = []
 
     def flush(self):
-        for series, data in self.readings.items():
-            if not data:
-                continue
-            self.send_reading(series[0], series[1], data)
-            self.readings[series] = []
+        (self.send_reading(series[0], series[1], data)
+         for series, data in self.readings.items())
 
     def send_reading(self, series_key, reading_type, data):
         api_key_option = "{0} api key".format(reading_type)
@@ -47,3 +44,5 @@ class Handler(object):
         except requests.exceptions.RequestException as e:
             logger.error('Unable to send {0} to TempoDB. {1!s}'.format(
                          series_key, e))
+        else:
+            del self.reading[(series_key, reading_type)]
