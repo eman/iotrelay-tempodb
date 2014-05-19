@@ -1,5 +1,5 @@
 '''
-Copyright © 2014, Emmanuel Levijarvi
+Copyright (c) 2014, Emmanuel Levijarvi
 All rights reserved.
 License BSD
 '''
@@ -38,9 +38,7 @@ class IoTTempoDBTest(TestCase):
             tdb_handler.set_reading(Reading('weather', value, timestamp, key))
         tdb_handler.flush()
         self.assertEqual(len(Client.data_points), len(self.readings()))
-        for a, b in zip(sorted(Client.data_points), sorted(self.readings())):
-            self.assertEqual(a, b)
-        # self.assertEqual(sorted(Client.data_points), sorted(self.readings()))
+        self.assertEqual(sorted(Client.data_points), sorted(self.readings()))
 
     def test_compare_readings_batch_size_one(self):
         config = {'batch size': 1, 'api key': '', 'api secret': ''}
@@ -50,9 +48,7 @@ class IoTTempoDBTest(TestCase):
             timestamp = datetime.strptime(ts, TIME_FMT)
             tdb_handler.set_reading(Reading('weather', value, timestamp, key))
         self.assertEqual(len(Client.data_points), len(self.readings()))
-        for a, b in zip(Client.data_points, self.readings()):
-            self.assertEqual(a, b)
-        # self.assertEqual(Client.data_points, self.readings())
+        self.assertEqual(Client.data_points, self.readings())
 
     def test_compare_readings_vary_batch_size(self):
         [self.compare_readings(i) for i in range(2, 12)]

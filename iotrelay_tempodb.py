@@ -28,11 +28,10 @@ class Handler(object):
         batch_option = "{0} batch size".format(reading.reading_type)
         if len(data) >= int(self.config.get(batch_option, self.batch_size)):
             self.send_reading(reading.series_key, reading.reading_type, data)
-            self.readings[(reading.series_key, reading.reading_type)] = []
 
     def flush(self):
-        (self.send_reading(series[0], series[1], data)
-         for series, data in self.readings.items())
+        [self.send_reading(series[0], series[1], data)
+         for series, data in self.readings.items()]
 
     def send_reading(self, series_key, reading_type, data):
         api_key_option = "{0} api key".format(reading_type)
@@ -45,4 +44,4 @@ class Handler(object):
             logger.error('Unable to send {0} to TempoDB. {1!s}'.format(
                          series_key, e))
         else:
-            del self.reading[(series_key, reading_type)]
+            del self.readings[(series_key, reading_type)]
