@@ -27,7 +27,7 @@ The ``reading types`` to be relayed to TempoDB should also be
 registered. In this example, reading types of power and weather will be
 relayed to TempoDB.
 
-.. code-blcok:: ini
+.. code-block:: ini
 
     [iotrelay-tempodb]
     reading types = power, weather
@@ -40,7 +40,7 @@ batches would be maintained for power and weather readings. The batch
 size may be changed by adding the ``batch size`` option to the
 ``iotrelay-tempodb`` section of ``~/.iotrelay.cfg``.
 
-.. code-blcok:: ini
+.. code-block:: ini
 
     [iotrelay-tempodb]
     batch size = 30
