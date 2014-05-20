@@ -4,7 +4,8 @@ Release v1.0.0
 
 iotrelay-tempodb is a data handler plugin for IoT Relay. It watches for
 data it has registered an interest in and relays it in batches to a
-TempoDB time series database.
+TempoDB time series database. See https://github.com/eman/iotrelay for
+more about IoT Relay.
 
 iotrelay-tempodb is available on PyPI and can be installed via pip.
 
