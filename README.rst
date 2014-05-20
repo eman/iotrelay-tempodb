@@ -1,4 +1,4 @@
-IoT Relay - TempoDB: A TempoDB Plugin for IoT Relay
+iotrelay-tempodb: A TempoDB Plugin for IoT Relay
 ========================================================================
 Release v1.0.0
 
