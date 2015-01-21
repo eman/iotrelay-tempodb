@@ -50,5 +50,5 @@ size may be changed by adding the ``batch size`` option to the
     api secret = your api secret
 
 
-Copyright (c) 2014, Emmanuel Levijarvi
+Copyright (c) 2015, Emmanuel Levijarvi
 All rights reserved.
